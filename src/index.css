@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  /* Header / Backgrounds */
+  --color-header: rgba(
+    232,
+    227,
+    227,
+    0.95
+  ); /* subtle off-white, semi-transparent for backdrop-blur */
+  --color-header-light: #f4f4f5; /* for mobile dropdown backgrounds */
+
+  /* Text */
+  --color-primary: #155dfc; /* deep blue - main text, links */
+  --color-secondary: #052a9c; /* slightly muted cyan-blue - hover / active accents */
+  --color-accent: #ffc107; /* optional gold/amber for CTA highlights */
+
+  /* Buttons */
+  --color-button-primary-bg: #052a9c; /* primary CTA buttons */
+  --color-button-primary-hover: #1d88c6; /* slightly lighter blue on hover */
+  --color-button-secondary-bg: transparent; /* secondary buttons */
+  --color-button-secondary-border: #052a9c; /* border for secondary buttons */
+  --color-button-secondary-hover: #052a9c; /* hover bg for secondary buttons */
+  --color-button-text: #ffffff; /* white for text on primary CTA */
+
+  /* Links */
+  --color-link-hover-bg: rgba(29, 136, 198, 0.1); /* subtle bg on hover */
+  --color-link-active-bg: #1d88c6; /* active link bg */
+  --color-link-active-text: #ffffff; /* active link text */
+
+  /* Misc */
+  --color-shadow: rgba(0, 0, 0, 0.08); /* subtle shadow for cards/nav */
+}

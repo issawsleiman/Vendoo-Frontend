@@ -1,0 +1,21 @@
+{
+  "short_name": "Vendoo",
+  "name": "Vendoo: Your Digital Storefront",
+  "icons": [
+    {
+      "src": "assets/vendoo_fav_icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "assets/vendoo_fav_icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#000000"
+}
