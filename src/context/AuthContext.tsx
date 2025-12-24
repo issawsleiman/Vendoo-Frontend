@@ -230,6 +230,8 @@ export function AuthenticationProvider({
         };
 
         return result;
+      } else {
+        toast.error("Error", response.error);
       }
     } catch (error: any) {
       return null;
