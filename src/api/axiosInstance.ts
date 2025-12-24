@@ -1,5 +1,5 @@
 import axios from "axios";
-const MAIN_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
+const MAIN_BASE_URL = import.meta.env.VITE_API_URL;
 const axiosInstance = axios.create({
   baseURL: MAIN_BASE_URL,
   headers: {

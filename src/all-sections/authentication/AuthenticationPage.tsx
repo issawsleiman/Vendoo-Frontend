@@ -536,7 +536,6 @@ function GoogleLoginButton({
         shape="circle"
         size="large"
         text="continue_with"
-        cancel_on_tap_outside
         useOneTap
         onSuccess={(res) => onSuccess(res.credential!)}
         onError={() => toast.error("Google login failed")}

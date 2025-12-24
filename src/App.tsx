@@ -9,7 +9,6 @@ import { ShopProvider } from "./context/ShopContext";
 import { DashboardProvider } from "./context/DashboardContext";
 
 export default function App() {
-  const googleClientID = import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID;
   return (
     <>
       <ToastContainer
@@ -19,7 +18,9 @@ export default function App() {
         theme="colored"
       />
       <ThemeProvider>
-        <GoogleOAuthProvider clientId={googleClientID}>
+        <GoogleOAuthProvider
+          clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}
+        >
           <AuthenticationProvider>
             <PublicProvider>
               <DashboardProvider>
