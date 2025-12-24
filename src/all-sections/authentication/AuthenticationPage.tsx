@@ -534,7 +534,7 @@ function GoogleLoginButton({
       </div>
       <GoogleLogin
         shape="circle"
-        size="large"
+        size="small"
         text="continue_with"
         hosted_domain="vendoolb.com"
         useOneTap
