@@ -179,7 +179,6 @@ export default function CreateShopPage() {
               />
             )}
           </div>
-
           <VendooButton
             children={
               isCreatingShop ? (
