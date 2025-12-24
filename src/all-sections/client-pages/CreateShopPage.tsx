@@ -195,17 +195,6 @@ export default function CreateShopPage() {
             isDisabled={isCreatingShop}
             className="w-full"
           />
-
-          <VendooButton
-            children={"Clear Cache"}
-            type="button"
-            className="w-full"
-            onClick={() => {
-              useUserStore.getState().setUserProfile(null);
-              useUserStore.getState().setCurrentUserToken("");
-              navigate(DASHBOARD_ROUTE_NAME);
-            }}
-          />
         </form>
       </div>
     </div>
