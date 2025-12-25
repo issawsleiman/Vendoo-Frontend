@@ -3,6 +3,7 @@ import { HttpStatusCode } from "axios";
 import type { VendooShop } from "../context/ShopContext";
 import { useUserStore } from "../store/useUserStore";
 import axiosInstance from "./axiosInstance";
+import { toast } from "react-toastify";
 
 // API constants
 const GET_SHOP_CATEGORIES_API_URL = "/api/categories";
@@ -47,13 +48,14 @@ export const createShopAPI = async (userID: string, shop: VendooShop) => {
       }
     );
 
-    if (response.status === HttpStatusCode.Created) {
+    if (response.data.status === HttpStatusCode.Ok) {
+      console.log("Shop Created Successfully");
       return response.data;
     }
-
     throw new Error("Shop creation failed");
   } catch (error) {
     const err = error as AxiosError<any>;
+    toast.error(err.message);
     throw err.response?.data?.error ?? "Failed to create shop";
   }
 };

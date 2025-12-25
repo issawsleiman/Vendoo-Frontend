@@ -6,6 +6,7 @@ import { VendooInput, VendooTextarea } from "../../../widgets/VendooInput";
 import VendooLabel from "../../../widgets/VendooLabel";
 import { SettingsHeaderContainer } from "../components/SettingsHeaderContainer";
 import { ProfileActionButtons } from "../components/ProfileActionButtons";
+import { useShopStore } from "../../../store/useShopStore";
 
 // --- Types ---
 interface StoreSettings {
@@ -18,6 +19,7 @@ interface StoreSettings {
 
 export default function StoreSettingsPage() {
   const { colors } = useThemeContext();
+  const shopStore = useShopStore();
   const {
     setSelectedDashboardItem,
     isEditingState: isEditingProfile,
@@ -25,10 +27,11 @@ export default function StoreSettingsPage() {
   } = useDashboardContext();
 
   const [showSuccess, setShowSuccess] = useState(false);
+  // getting current shop state
   const [storeSettings, setStoreSettings] = useState<StoreSettings>({
-    name: "My Awesome Store",
-    description: "Welcome to our store! We offer high-quality products...",
-    isPrivate: false,
+    name: shopStore.shop?.shopName!,
+    description: shopStore.shop?.shopDescription!,
+    isPrivate: shopStore.shop?.status!,
   });
 
   const [tempSettings, setTempSettings] =

@@ -1,10 +1,9 @@
-import { Bell, Search, Menu } from "lucide-react";
+import { Bell, Menu } from "lucide-react";
 
 import { useDashboardContext } from "../../../context/DashboardContext";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { Outlet } from "react-router-dom";
 import { VendooIconButton } from "../../../widgets/VendooIconButton";
-import { VendooInput } from "../../../widgets/VendooInput";
 
 import { motion } from "framer-motion";
 import DashboardSideBar from "./sidebar";
@@ -82,19 +81,6 @@ export default function DashboardLayout() {
               </div>
 
               <div className="flex items-center gap-2 lg:gap-3">
-                <div className="hidden md:block">
-                  <VendooInput
-                    type="text"
-                    name="dashboard-search"
-                    value=""
-                    id="dashboard-search"
-                    key={"dashboard-search"}
-                    hintText="Search"
-                    onChange={() => {}}
-                    PrefixIcon={Search}
-                  />
-                </div>
-
                 <VendooIconButton Icon={Bell} onClick={() => {}} />
                 <UserAvatar />
               </div>

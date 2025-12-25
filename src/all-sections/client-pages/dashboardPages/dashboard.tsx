@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import { useThemeContext } from "../../../context/ThemeContext";
 import { useDashboardContext } from "../../../context/DashboardContext";
 import { DASHBOARD_PG_NAME } from "./layout";
+import { useShopStore } from "../../../store/useShopStore";
 
 export default function DashboardPage() {
   const { colors } = useThemeContext();
+  const shopStore = useShopStore();
   const { setSelectedDashboardItem } = useDashboardContext();
 
   useEffect(() => {
@@ -17,6 +19,7 @@ export default function DashboardPage() {
       style={{ backgroundColor: colors.bgColor }}
     >
       <div className="text-center">
+        <p>Hii {shopStore.shop?.shopName}</p>
         <h1 className="text-3xl font-bold" style={{ color: colors.textColor }}>
           Dashboard
         </h1>

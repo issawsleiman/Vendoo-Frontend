@@ -7,6 +7,7 @@ import {
   getCategoriesAPI,
   getShopBySlugAPI,
 } from "../api/shopApi";
+import type { UserShop } from "../store/useShopStore";
 
 export interface VendooShop {
   UserID: string;
@@ -19,8 +20,10 @@ interface ShopContextProps {
   categories: Categories[] | null;
   getCategories: (token: string) => Promise<Categories[] | null>;
 
-  shop: VendooShop | null;
-  createNewShop: (userID: string, shopData: VendooShop) => Promise<boolean>;
+  createNewShop: (
+    userID: string,
+    shopData: VendooShop
+  ) => Promise<UserShop | null>;
 
   getShopBySlug: (shopName: string) => Promise<boolean>;
 }
@@ -29,7 +32,6 @@ const ShopContext = createContext<ShopContextProps | null>(null);
 
 export function ShopProvider({ children }: { children: React.ReactNode }) {
   const [categories, setCategories] = useState<Categories[] | null>(null);
-  const [shop, setShop] = useState<VendooShop | null>(null);
 
   // getting all categories
   const getCatego = async (token: string): Promise<Categories[] | null> => {
@@ -65,18 +67,35 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
   const createShop = async (
     userID: string,
     shopData: VendooShop
-  ): Promise<boolean> => {
+  ): Promise<UserShop | null> => {
     try {
-      // call API to create shop
-      const createShopResponse = await createShopAPI(userID, shopData);
-      // if successful, set the shop state
-      if (createShopResponse.status === 200) {
-        setShop(shopData);
-        return true;
+      // create shop api
+      const result = await createShopAPI(userID, shopData);
+      if (result) {
+        // now getting created shop details
+        const {
+          shop_name,
+          shop_description,
+          location,
+          phone,
+          email,
+          category_name,
+          status,
+        } = result.shop_details;
+        const userShop: UserShop = {
+          shopName: shop_name,
+          shopDescription: shop_description,
+          email: email,
+          location: location,
+          phoneNumber: phone,
+          status: status,
+          categoryName: category_name,
+        };
+        return userShop;
       }
-      return false;
+      return null;
     } catch (error) {
-      return false;
+      return null;
     }
   };
 
@@ -98,7 +117,7 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
       value={{
         categories: categories,
         getCategories: getCatego,
-        shop: shop,
+
         createNewShop: createShop,
         getShopBySlug: getShop,
       }}
