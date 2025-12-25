@@ -41,6 +41,8 @@ export const RegisterAPI = async (
       password,
     });
     if (response.data.status === HttpStatusCode.Ok) {
+      console.log("register response status:", response.data.status);
+      console.log("Register response data:", response.data);
       return response.data;
     }
   } catch (error: any) {

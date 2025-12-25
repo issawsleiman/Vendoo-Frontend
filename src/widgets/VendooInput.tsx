@@ -32,22 +32,22 @@ interface InputProps extends BaseInputProps {
   isShowingPassword?: boolean;
   passwordToggleAction?: React.MouseEventHandler<HTMLDivElement>;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  maxLength?: number;
 }
 
 interface VendooTextareaProps extends BaseInputProps {
   Icon?: LucideIcon;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   rows?: number;
+  maxLength?: number;
 }
-
-// --- Utility for Theme Logic ---
 
 function getThemeStyles(isDark: boolean, shouldLightTheme: boolean) {
   const useLight = shouldLightTheme || !isDark;
   return {
     borderColor: useLight ? BorderColorWhite : BorderColorDark,
     backgroundColor: useLight ? PrimaryColorWhite : PrimaryColorDark,
-    textColor: useLight ? TextColorWhite : TextColorDark, // Note: check if these constants are correct for contrast
+    textColor: useLight ? TextColorWhite : TextColorDark,
     iconColor: useLight ? ColorBlack : ColorWhite,
     autofillBg: useLight ? PrimaryColorWhite : PrimaryColorDark,
     autofillText: useLight ? ColorBlack : ColorWhite,
@@ -105,6 +105,7 @@ export const VendooInput = forwardRef<HTMLInputElement, InputProps>(
             required={props.isRequired}
             onChange={props.onChange}
             disabled={props.isDisabled}
+            maxLength={props.maxLength}
             className="flex-1 min-w-0 px-4 py-3 text-sm md:text-base bg-transparent border-none focus:outline-none"
             style={{ color: styles.textColor, caretColor: styles.textColor }}
           />
@@ -177,6 +178,7 @@ export const VendooTextarea = forwardRef<
           required={props.isRequired}
           onChange={props.onChange}
           disabled={props.isDisabled}
+          maxLength={props.maxLength}
           className="flex-1 min-w-0 px-4 py-3 text-sm md:text-base bg-transparent focus:outline-none resize-none"
           style={{ color: styles.textColor, caretColor: styles.textColor }}
         />

@@ -125,12 +125,12 @@ export function AuthenticationProvider({
       return false;
     }
     try {
-      const response = await RegisterAPI(
+      const result = await RegisterAPI(
         registerInfo.Name,
         registerInfo.Email,
         registerInfo.Password
       );
-      if (response.data) {
+      if (result) {
         return true;
       }
       return false;
