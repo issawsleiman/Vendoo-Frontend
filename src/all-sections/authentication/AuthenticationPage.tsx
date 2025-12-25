@@ -254,6 +254,7 @@ function AuthenticationForm({
         Email: registerFormData.email,
         Password: registerFormData.password,
       });
+      console.log("Register result:", result);
       if (result) {
         toast.info(
           "A verification link has been sent to your email. Please check your inbox (and spam folder) and click the link to verify your account."
