@@ -28,6 +28,7 @@ import VendooButton from "../../widgets/VendooButton";
 import { VendooInput, VendooTextarea } from "../../widgets/VendooInput";
 import VendooLabel from "../../widgets/VendooLabel";
 import { VendooLogo } from "../../widgets/VendooLogo";
+import { useShopStore } from "../../store/useShopStore";
 
 interface ValidationErrors {
   shopName?: string;
@@ -38,7 +39,7 @@ interface ValidationErrors {
 // Constants
 const DEFAULT_CATEGORY_ID = "10";
 const SHOP_NAME_MIN_LENGTH = 3;
-const SHOP_NAME_MAX_LENGTH = 100;
+const SHOP_NAME_MAX_LENGTH = 20;
 const DESCRIPTION_MIN_LENGTH = 10;
 const DESCRIPTION_MAX_LENGTH = 500;
 
@@ -46,6 +47,7 @@ export default function CreateShopPage() {
   const { isDark } = useThemeContext();
   const publicContext = useLandingContext();
   const userStore = useUserStore();
+  const shopStore = useShopStore();
   const navigate = useNavigate();
   const shopContext = useShopContext();
 
@@ -85,8 +87,6 @@ export default function CreateShopPage() {
   useEffect(() => {
     if (hasShop || !userToken) return;
 
-    console.log("Loading Categories");
-    console.log("User token:", userToken);
     const loadCategories = async () => {
       publicContext.setLoadingStatus(true);
       try {
@@ -159,13 +159,16 @@ export default function CreateShopPage() {
         ShopDescription: description,
       };
 
-      const created = await shopContext.createNewShop(
+      const shopDetails = await shopContext.createNewShop(
         userStore.profile?.userID!,
         newShop
       );
-      if (created) {
-        toast.success("Shop created successfully!");
+      console.log("ShopDetails", shopDetails);
+      if (shopDetails) {
+        // updating user's hasShop status
         userStore.updateHasShopStatus(true);
+        // saving the store details
+        shopStore.setUserShop(shopDetails);
         navigate(DASHBOARD_ROUTE_NAME, { replace: true });
       } else {
         toast.error("Failed to create shop. Please try again.");
