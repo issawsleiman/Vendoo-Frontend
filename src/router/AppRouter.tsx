@@ -31,8 +31,9 @@ import {
 import LandingLayout from "../all-sections/landing/LandingLayout";
 import { useThemeContext } from "../context/ThemeContext";
 import { PrimaryColorDark, PrimaryColorWhite } from "../utils/constants/colors";
-import { PublicShopPage } from "../all-sections/users-pages/PublicShopPage";
+
 import StoreSettingsPage from "../all-sections/client-pages/dashboardPages/storeSettings";
+import PublicShopPage from "../all-sections/users-pages/PublicShopPage";
 
 const HomeLandingPage = lazy(
   () => import("../all-sections/landing/pages/HomeLandingPage")

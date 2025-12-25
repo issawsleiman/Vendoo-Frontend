@@ -1,11 +1,7 @@
-import { X, Settings } from "lucide-react";
+import { X, Settings, Store } from "lucide-react";
 import { useDashboardContext } from "../../../context/DashboardContext";
 import { useUserStore } from "../../../store/useUserStore";
 import {
-  BorderColorDark,
-  BorderColorWhite,
-  PrimaryColorDark,
-  PrimaryColorWhite,
   TextColorDark,
   TextColorWhite,
   MutedTextColorDark,
@@ -16,7 +12,8 @@ import { NavListTile } from "./list/NavListTile";
 
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
-import { VendooLogo } from "../../../widgets/VendooLogo";
+import { useShopStore } from "../../../store/useShopStore";
+import { useThemeContext } from "../../../context/ThemeContext";
 
 interface DashboardSidebarProps {
   isDark: boolean;
@@ -25,11 +22,10 @@ interface DashboardSidebarProps {
 
 export default function DashboardSideBar({ isDark }: DashboardSidebarProps) {
   const dashboardContext = useDashboardContext();
+  const shopStore = useShopStore();
+  const { colors } = useThemeContext();
 
   const navigate = useNavigate();
-
-  const borderColor = isDark ? BorderColorDark : BorderColorWhite;
-  const bgColor = isDark ? PrimaryColorDark : PrimaryColorWhite;
 
   const translateX = dashboardContext.dashboardMobileMenuState
     ? "translate-x-0"
@@ -39,16 +35,31 @@ export default function DashboardSideBar({ isDark }: DashboardSidebarProps) {
     <aside
       className={`w-64 flex flex-col ${translateX} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-30 transition-transform duration-300 border-r`}
       style={{
-        backgroundColor: bgColor,
-        borderColor: borderColor,
+        backgroundColor: colors.bgColor,
+        borderColor: colors.borderColor,
       }}
     >
       {/* Logo */}
       <div
         className="h-16 px-6 flex items-center justify-between border-b"
-        style={{ borderColor: borderColor }}
+        style={{ borderColor: colors.borderColor }}
       >
-        <VendooLogo />
+        <div className="px-4 py-5 border-b border-gray-700/50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <Store className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex flex-col">
+              <h1
+                className="text-lg font-bold  tracking-wide"
+                style={{ color: colors.textColor }}
+              >
+                {formatShopName(shopStore.shop?.shopName) || "My Shop"}
+              </h1>
+              <span className="text-xs text-gray-400">Seller Dashboard</span>
+            </div>
+          </div>
+        </div>
         <button
           onClick={() => dashboardContext.setDashboardMobileMenuState(false)}
           className="lg:hidden p-2 rounded-lg hover:opacity-80 transition-colors"
@@ -94,7 +105,7 @@ export default function DashboardSideBar({ isDark }: DashboardSidebarProps) {
       {/* Bottom Section */}
       <div
         className="p-4 border-t space-y-2"
-        style={{ borderColor: borderColor }}
+        style={{ borderColor: colors.borderColor }}
       >
         <button
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all hover:opacity-80"
@@ -168,3 +179,25 @@ function UserAvatar() {
     />
   );
 }
+/**
+ * Formats shop name to proper case (e.g., "iwstech" → "IWS Tech")
+ */
+const formatShopName = (name: string | undefined): string => {
+  if (!name) return "";
+
+  // If it's all lowercase and contains no spaces, try to intelligently split
+  if (name === name.toLowerCase() && !name.includes(" ")) {
+    // Common patterns: "iwstech" → "IWS Tech"
+    // You can customize this based on your needs
+    return name
+      .split(/(?=[A-Z])|(?<=\d)(?=[a-zA-Z])|(?<=[a-zA-Z])(?=\d)/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
+
+  // Otherwise, just capitalize first letter of each word
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+};

@@ -24,7 +24,7 @@ export default function DashboardLayout() {
   const colors = useThemeContext().colors;
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden select-none">
       {/* Mobile Overlay */}
       {dashboardContext.dashboardMobileMenuState && (
         <div

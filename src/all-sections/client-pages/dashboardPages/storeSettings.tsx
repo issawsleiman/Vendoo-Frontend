@@ -1,19 +1,15 @@
 import { useEffect, useState, type ChangeEvent } from "react";
 import { useDashboardContext } from "../../../context/DashboardContext";
-import { useThemeContext } from "../../../context/ThemeContext";
+import {
+  useThemeContext,
+  type ThemeColors,
+} from "../../../context/ThemeContext";
 import { Store, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { VendooInput, VendooTextarea } from "../../../widgets/VendooInput";
 import VendooLabel from "../../../widgets/VendooLabel";
 import { SettingsHeaderContainer } from "../components/SettingsHeaderContainer";
 import { ProfileActionButtons } from "../components/ProfileActionButtons";
-import { useShopStore } from "../../../store/useShopStore";
-
-// --- Types ---
-interface StoreSettings {
-  name: string;
-  description: string;
-  isPrivate: boolean;
-}
+import { useShopStore, type UserShop } from "../../../store/useShopStore";
 
 // ...................................MAIN SETTINGS PAGE........................
 
@@ -28,26 +24,28 @@ export default function StoreSettingsPage() {
 
   const [showSuccess, setShowSuccess] = useState(false);
   // getting current shop state
-  const [storeSettings, setStoreSettings] = useState<StoreSettings>({
-    name: shopStore.shop?.shopName!,
-    description: shopStore.shop?.shopDescription!,
-    isPrivate: shopStore.shop?.status!,
+  const [shopSettings, setShopSettings] = useState<UserShop>({
+    shopName: shopStore.shop?.shopName,
+    shopDescription: shopStore.shop?.shopDescription,
+    categoryName: shopStore.shop?.categoryName,
+    email: shopStore.shop?.email,
+    location: shopStore.shop?.location,
+    phoneNumber: shopStore.shop?.phoneNumber,
+    status: shopStore.shop?.status,
   });
-
-  const [tempSettings, setTempSettings] =
-    useState<StoreSettings>(storeSettings);
 
   useEffect(() => {
     setSelectedDashboardItem("Store Settings");
+    setShopSettings(shopSettings);
     setEditingProfile(false);
   }, [setSelectedDashboardItem, setEditingProfile]);
 
   // handles saving new info
   const handleSave = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    setStoreSettings(tempSettings);
     setEditingProfile(false);
     setShowSuccess(true);
+    shopStore.setUserShop(shopSettings);
     setTimeout(() => setShowSuccess(false), 3000);
   };
 
@@ -61,20 +59,20 @@ export default function StoreSettingsPage() {
         {showSuccess && <SuccessToast colors={colors} />}
         <SettingsHeader colors={colors} />
         <StoreInfoSection
-          data={isEditingProfile ? tempSettings : storeSettings}
-          onChange={(newData: Partial<StoreSettings>) =>
-            setTempSettings({ ...tempSettings, ...newData })
+          data={isEditingProfile ? shopSettings : shopSettings}
+          onChange={(newData: Partial<UserShop | null>) =>
+            setShopSettings({ ...shopSettings, ...newData })
           }
           colors={colors}
         />
         <VisibilitySection
-          isPrivate={
-            isEditingProfile ? tempSettings.isPrivate : storeSettings.isPrivate
+          isPublic={
+            isEditingProfile ? shopSettings.status : shopSettings.status
           }
           onToggle={() =>
-            setTempSettings({
-              ...tempSettings,
-              isPrivate: !tempSettings.isPrivate,
+            setShopSettings({
+              ...shopSettings,
+              status: !shopSettings.status,
             })
           }
           colors={colors}
@@ -148,8 +146,17 @@ function SettingsHeader({ colors }: any) {
  * STORE INFO SECTION
  * Handles Name and Description fields
  */
-function StoreInfoSection({ data, onChange, colors }: any) {
+function StoreInfoSection({
+  data,
+  onChange,
+  colors,
+}: {
+  data: UserShop;
+  onChange: (data: UserShop | null) => void;
+  colors: ThemeColors;
+}) {
   const { isEditingState: isEditingProfile } = useDashboardContext();
+
   return (
     <div
       className="rounded-xl border shadow-sm overflow-hidden"
@@ -182,15 +189,15 @@ function StoreInfoSection({ data, onChange, colors }: any) {
               id="store-name"
               name="store-name"
               PrefixIcon={Store}
-              value={data.name}
+              value={data.shopName!}
               isFullWidth
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                onChange({ name: e.target.value })
-              }
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                onChange({ ...data, shopName: e.target.value });
+              }}
               type="text"
             />
           ) : (
-            <DisplayBox text={data.name} colors={colors} />
+            <DisplayBox text={data.shopName} colors={colors} />
           )}
           <p className="text-xs mt-1" style={{ color: colors.mutedTextColor }}>
             This is the public name displayed to customers
@@ -202,9 +209,9 @@ function StoreInfoSection({ data, onChange, colors }: any) {
           <VendooLabel text="Store Description" />
           {isEditingProfile ? (
             <VendooTextarea
-              value={data.description}
+              value={data.shopDescription!}
               onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                onChange({ description: e.target.value })
+                onChange({ ...data, shopDescription: e.target.value })
               }
               rows={5}
               id="store-description"
@@ -212,7 +219,11 @@ function StoreInfoSection({ data, onChange, colors }: any) {
               isFullWidth
             />
           ) : (
-            <DisplayBox text={data.description} colors={colors} isMultiLine />
+            <DisplayBox
+              text={data.shopDescription}
+              colors={colors}
+              isMultiLine
+            />
           )}
           <p className="text-xs mt-1" style={{ color: colors.mutedTextColor }}>
             A brief overview of your store and what you offer
@@ -226,9 +237,9 @@ function StoreInfoSection({ data, onChange, colors }: any) {
 //  .....................................VISIBILITY SECTION........................
 //   Handles the Private/Public toggle
 
-function VisibilitySection({ isPrivate, onToggle, colors }: any) {
+function VisibilitySection({ isPublic, onToggle, colors }: any) {
   const { isEditingState: isEditingState } = useDashboardContext();
-  const statusBg = isPrivate ? "#fef2f2" : "#f0fdf4";
+  const statusBg = isPublic ? "#f0fdf4" : "#fef2f2";
 
   return (
     <div
@@ -266,7 +277,7 @@ function VisibilitySection({ isPrivate, onToggle, colors }: any) {
               className="p-3 rounded-lg shrink-0"
               style={{ backgroundColor: statusBg }}
             >
-              {isPrivate ? (
+              {!isPublic ? (
                 <EyeOff size={24} className="text-red-600" />
               ) : (
                 <Eye size={24} className="text-green-600" />
@@ -278,13 +289,13 @@ function VisibilitySection({ isPrivate, onToggle, colors }: any) {
                 className="text-lg font-semibold"
                 style={{ color: colors.textColor }}
               >
-                {isPrivate ? "Store is Private" : "Store is Public"}
+                {!isPublic ? "Store is Private" : "Store is Public"}
               </h3>
               <p
                 className="text-sm mt-1"
                 style={{ color: colors.mutedTextColor }}
               >
-                {isPrivate
+                {!isPublic
                   ? "Hidden from customers. Purchases are disabled."
                   : "Visible to all. Customers can browse and buy."}
               </p>
@@ -292,9 +303,9 @@ function VisibilitySection({ isPrivate, onToggle, colors }: any) {
           </div>
 
           <ToggleSwitch
-            label={isPrivate ? "Private" : "Public"}
+            label={isPublic ? "Public" : "Private"}
             onToggle={onToggle}
-            isToggled={isPrivate}
+            isToggled={isPublic}
             isDisabled={!isEditingState}
           />
         </div>
@@ -318,7 +329,7 @@ export function ToggleSwitch({
 }: ToggleSwitchProps) {
   const { colors } = useThemeContext();
 
-  const statusColor = isToggled ? "#dc2626" : "#16a34a";
+  const statusColor = isToggled ? "#16a34a" : "#dc2626";
 
   return (
     <div className="mt-4 lg:mt-0 lg:ml-6 shrink-0">

@@ -6,6 +6,7 @@ import {
   createShopAPI,
   getCategoriesAPI,
   getShopBySlugAPI,
+  getShopByUserIdAPI,
 } from "../api/shopApi";
 import type { UserShop } from "../store/useShopStore";
 
@@ -23,8 +24,9 @@ interface ShopContextProps {
   createNewShop: (
     userID: string,
     shopData: VendooShop
-  ) => Promise<UserShop | null>;
+  ) => Promise<boolean | null>;
 
+  getShopByUserID: (shopID: string) => Promise<UserShop | null>;
   getShopBySlug: (shopName: string) => Promise<boolean>;
 }
 
@@ -67,12 +69,23 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
   const createShop = async (
     userID: string,
     shopData: VendooShop
-  ): Promise<UserShop | null> => {
+  ): Promise<boolean> => {
     try {
       // create shop api
       const result = await createShopAPI(userID, shopData);
       if (result) {
-        // now getting created shop details
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const getShopByUserID = async (userID: string): Promise<UserShop | null> => {
+    try {
+      const response = await getShopByUserIdAPI(userID);
+      if (response) {
         const {
           shop_name,
           shop_description,
@@ -81,26 +94,26 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
           email,
           category_name,
           status,
-        } = result.shop_details;
-        const userShop: UserShop = {
+        } = response.shop_details;
+        const shopDetails: UserShop = {
           shopName: shop_name,
+          categoryName: category_name,
           shopDescription: shop_description,
-          email: email,
           location: location,
           phoneNumber: phone,
+          email: email,
           status: status,
-          categoryName: category_name,
         };
-        return userShop;
+        return shopDetails;
       }
-      return null;
-    } catch (error) {
+    } catch (error: any) {
       return null;
     }
+    return null;
   };
 
-  // function to get a shop
-  const getShop = async (shop: string): Promise<boolean> => {
+  // function to get a shop by slug
+  const getShopBySlug = async (shop: string): Promise<boolean> => {
     try {
       const response = await getShopBySlugAPI(shop);
       if (response.err) {
@@ -119,7 +132,8 @@ export function ShopProvider({ children }: { children: React.ReactNode }) {
         getCategories: getCatego,
 
         createNewShop: createShop,
-        getShopBySlug: getShop,
+        getShopByUserID: getShopByUserID,
+        getShopBySlug: getShopBySlug,
       }}
     >
       {children}

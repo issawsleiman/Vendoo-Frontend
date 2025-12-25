@@ -14,7 +14,7 @@ import {
   TextColorWhite,
 } from "../utils/constants/colors";
 
-interface ThemeColors {
+export interface ThemeColors {
   bgColor: string;
   textColor: string;
   cardBgColor: string;

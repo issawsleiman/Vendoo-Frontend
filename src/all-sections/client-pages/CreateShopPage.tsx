@@ -28,7 +28,6 @@ import VendooButton from "../../widgets/VendooButton";
 import { VendooInput, VendooTextarea } from "../../widgets/VendooInput";
 import VendooLabel from "../../widgets/VendooLabel";
 import { VendooLogo } from "../../widgets/VendooLogo";
-import { useShopStore } from "../../store/useShopStore";
 
 interface ValidationErrors {
   shopName?: string;
@@ -47,7 +46,6 @@ export default function CreateShopPage() {
   const { isDark } = useThemeContext();
   const publicContext = useLandingContext();
   const userStore = useUserStore();
-  const shopStore = useShopStore();
   const navigate = useNavigate();
   const shopContext = useShopContext();
 
@@ -159,16 +157,14 @@ export default function CreateShopPage() {
         ShopDescription: description,
       };
 
-      const shopDetails = await shopContext.createNewShop(
+      const result = await shopContext.createNewShop(
         userStore.profile?.userID!,
         newShop
       );
-      console.log("ShopDetails", shopDetails);
-      if (shopDetails) {
+
+      if (result) {
         // updating user's hasShop status
         userStore.updateHasShopStatus(true);
-        // saving the store details
-        shopStore.setUserShop(shopDetails);
         navigate(DASHBOARD_ROUTE_NAME, { replace: true });
       } else {
         toast.error("Failed to create shop. Please try again.");

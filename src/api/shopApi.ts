@@ -3,12 +3,12 @@ import { HttpStatusCode } from "axios";
 import type { VendooShop } from "../context/ShopContext";
 import { useUserStore } from "../store/useUserStore";
 import axiosInstance from "./axiosInstance";
-import { toast } from "react-toastify";
 
 // API constants
 const GET_SHOP_CATEGORIES_API_URL = "/api/categories";
 const CREATE_SHOP_API_URL = "/api/create-shop";
 const GET_SHOP_API_URL = "/api/shops";
+const GET_SHOP_BY_USER_ID = "/api/shop";
 
 export const getCategoriesAPI = async (token: string) => {
   try {
@@ -49,14 +49,26 @@ export const createShopAPI = async (userID: string, shop: VendooShop) => {
     );
 
     if (response.data.status === HttpStatusCode.Ok) {
-      console.log("Shop Created Successfully");
       return response.data;
     }
     throw new Error("Shop creation failed");
   } catch (error) {
     const err = error as AxiosError<any>;
-    toast.error(err.message);
     throw err.response?.data?.error ?? "Failed to create shop";
+  }
+};
+
+export const getShopByUserIdAPI = async (userID: string) => {
+  try {
+    const response = await axiosInstance.post(GET_SHOP_BY_USER_ID, {
+      user_id: userID,
+    });
+    if (response.data.status === HttpStatusCode.Found) {
+      return response.data;
+    }
+  } catch (error) {
+    const err = error as AxiosError<any>;
+    throw err.response?.data?.error ?? "Failed to fetch shop by userID";
   }
 };
 
