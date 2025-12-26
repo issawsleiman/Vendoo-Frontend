@@ -15,10 +15,10 @@ import {
 // --- Types ---
 
 interface BaseInputProps {
-  id: string;
+  id?: string;
   value: string;
-  name: string;
-  hintText?: string;
+  name?: string;
+  placeholder?: string;
   isRequired?: boolean;
   isFullWidth?: boolean;
   shouldLightTheme?: boolean;
@@ -101,7 +101,7 @@ export const VendooInput = forwardRef<HTMLInputElement, InputProps>(
             name={props.name}
             type={inputType}
             value={props.value}
-            placeholder={props.hintText}
+            placeholder={props.placeholder}
             required={props.isRequired}
             onChange={props.onChange}
             disabled={props.isDisabled}
@@ -174,7 +174,7 @@ export const VendooTextarea = forwardRef<
           name={props.name}
           value={props.value}
           rows={props.rows ?? 4}
-          placeholder={props.hintText}
+          placeholder={props.placeholder}
           required={props.isRequired}
           onChange={props.onChange}
           disabled={props.isDisabled}

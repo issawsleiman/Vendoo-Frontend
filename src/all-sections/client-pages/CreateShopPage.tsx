@@ -234,7 +234,7 @@ export default function CreateShopPage() {
             <VendooLabel text="Shop Name*" htmlFor="shop-name" />
             <VendooInput
               name="shop-name"
-              hintText="e.g., Premium Vintage Store"
+              placeholder="e.g., Premium Vintage Store"
               type="text"
               value={shopName}
               onChange={(e) => {
@@ -274,7 +274,7 @@ export default function CreateShopPage() {
             <VendooLabel text="Shop Description*" htmlFor="shop-description" />
             <VendooTextarea
               name="shop-description"
-              hintText="Describe what makes your shop unique..."
+              placeholder="Describe what makes your shop unique..."
               rows={4}
               value={description}
               onChange={(e) => {

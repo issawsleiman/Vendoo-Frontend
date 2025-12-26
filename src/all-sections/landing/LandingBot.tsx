@@ -63,7 +63,7 @@ function VendooBotChatArea() {
       <div className="flex flex-row w-full">
         <div className="w-full">
           <VendooInput
-            hintText="Type your message..."
+            placeholder="Type your message..."
             isPassword={false}
             value={chatInput}
             onChange={(e: any) => setChatInput(e.target.value)}

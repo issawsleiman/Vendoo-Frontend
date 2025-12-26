@@ -173,7 +173,7 @@ export default function ForgotOrCreatePasswordPage({
                     value={password}
                     name="password"
                     type="password"
-                    hintText="Enter new password"
+                    placeholder="Enter new password"
                     PrefixIcon={Lock}
                     isRequired
                     isFullWidth
@@ -191,7 +191,7 @@ export default function ForgotOrCreatePasswordPage({
                     value={confirmPassword}
                     name="confirmPassword"
                     type="password"
-                    hintText="Confirm new password"
+                    placeholder="Confirm new password"
                     PrefixIcon={Lock}
                     isRequired
                     isFullWidth
@@ -214,7 +214,7 @@ export default function ForgotOrCreatePasswordPage({
                     value={email}
                     name="email"
                     type="email"
-                    hintText="you@example.com"
+                    placeholder="you@example.com"
                     PrefixIcon={Mail}
                     isRequired
                     isFullWidth

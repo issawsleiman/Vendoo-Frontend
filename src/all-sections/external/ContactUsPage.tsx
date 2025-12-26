@@ -255,7 +255,7 @@ export default function ContactPage() {
                       value={name}
                       name="contact-name"
                       type="text"
-                      hintText="John Doe"
+                      placeholder="John Doe"
                       onChange={(e: any) => setName(e.target.value)}
                       isFullWidth
                     />
@@ -269,7 +269,7 @@ export default function ContactPage() {
                       name="contact-email"
                       type="email"
                       onChange={(e: any) => setEmail(e.target.value)}
-                      hintText="you@example.com"
+                      placeholder="you@example.com"
                       isFullWidth
                     />
                   </motion.div>
@@ -280,7 +280,7 @@ export default function ContactPage() {
                       id="message"
                       value={message}
                       name="message"
-                      hintText="Tell us how we can help you..."
+                      placeholder="Tell us how we can help you..."
                       onChange={(e: any) => setMessage(e.target.value)}
                       isFullWidth
                       rows={6}

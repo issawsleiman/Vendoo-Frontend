@@ -184,7 +184,7 @@ export const VendooDialog: React.FC<VendooDialogProps> = ({
 
             {/* Dialog Body */}
             <main
-              className="p-6 overflow-y-auto flex-grow"
+              className="w-full p-6 overflow-y-auto grow"
               style={{
                 color: currentTheme.isDark ? TextColorDark : TextColorWhite,
               }}

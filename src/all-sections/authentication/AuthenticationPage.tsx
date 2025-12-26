@@ -436,7 +436,7 @@ function AuthenticationForm({
                 type={field.type}
                 value={field.value}
                 PrefixIcon={field.icon}
-                hintText={field.hint}
+                placeholder={field.hint}
                 onChange={(e) => handleInputChange(field.id, e.target.value)}
                 isRequired
                 isPassword={field.isPassword}
