@@ -31,3 +31,16 @@
   /* Misc */
   --color-shadow: rgba(0, 0, 0, 0.08); /* subtle shadow for cards/nav */
 }
+
+/* ============================= */
+/* Scrollbar Utilities */
+/* ============================= */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}

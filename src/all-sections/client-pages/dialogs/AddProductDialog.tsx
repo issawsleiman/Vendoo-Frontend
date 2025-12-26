@@ -180,7 +180,7 @@ function AddProductDialog({
       <div className="flex items-center justify-center gap-4 mb-8">
         <div
           className={`flex items-center gap-2 ${
-            currentStep === 1 ? "text-blue-600" : "text-green-600"
+            currentStep === 1 ? colors.accentColor : "text-green-600"
           }`}
         >
           <div
@@ -244,7 +244,8 @@ function AddProductDialog({
         <div>
           <VendooLabel text="Category*" />
           <select
-            className="w-full p-3 rounded-xl border border-gray-300 bg-white outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+            className="w-full p-3 rounded-xl border  outline-none  transition-all"
+            style={{ backgroundColor: colors.bgColor }}
             value={formData.category}
             onChange={(e) => handleInputChange("category", e.target.value)}
           >
@@ -277,7 +278,10 @@ function AddProductDialog({
         <div className="space-y-2">
           <VendooLabel text="Product Image" />
           {!imagePreview ? (
-            <label className="flex flex-col items-center justify-center w-full h-44 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:bg-gray-50 transition-colors">
+            <label
+              className="flex flex-col items-center justify-center w-full h-44 border-2 border-dashed  rounded-2xl cursor-pointer  transition-colors"
+              style={{ borderColor: colors.borderColor }}
+            >
               <Upload className="text-gray-400 mb-2" />
               <p className="text-sm font-medium text-gray-600">
                 Click to upload image
@@ -299,7 +303,8 @@ function AddProductDialog({
               />
               <button
                 onClick={removeImage}
-                className="absolute -top-2 -right-2 bg-white text-red-500 rounded-full p-1.5 shadow-md border hover:bg-red-50"
+                className="absolute -top-2 -right-2  text-red-500 rounded-full p-1.5 shadow-md border "
+                style={{ backgroundColor: colors.bgColor }}
               >
                 <X size={16} />
               </button>
@@ -401,7 +406,7 @@ function AddProductDialog({
 
   return (
     <VendooDialog Open={open} onClose={handleClose}>
-      <div className="w-full max-w-2xl px-2">
+      <div className="w-full max-w-2xl px-2 no-scrollbar">
         {/* Header */}
         <header className="flex justify-between items-start mb-6 pb-4 border-b">
           <div>
@@ -430,7 +435,7 @@ function AddProductDialog({
         <StepIndicator />
 
         {/* Scrollable Content Area */}
-        <div className="max-h-[60vh] overflow-y-auto px-1 ">
+        <div className="max-h-[60vh] overflow-y-auto grow no-scrollbar px-1 ">
           {currentStep === 1 ? renderStepOne() : renderStepTwo()}
         </div>
 

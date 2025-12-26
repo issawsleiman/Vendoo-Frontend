@@ -20,6 +20,7 @@ import { DASHBOARD_PG_PRODUCTS_NAME } from "./layout";
 import VendooLabel from "../../../widgets/VendooLabel";
 import VendooButton from "../../../widgets/VendooButton";
 import AddProductDialog from "../dialogs/AddProductDialog";
+import { VendooInput } from "../../../widgets/VendooInput";
 
 // --- Types ---
 
@@ -177,13 +178,13 @@ function ProductsTable({ onAddClick }: { onAddClick: () => void }) {
   function ActionButtons() {
     return (
       <div className="flex items-center justify-end gap-1">
-        <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500">
+        <button className="p-2  rounded-lg transition-colors text-gray-500">
           <Eye size={16} />
         </button>
-        <button className="p-2 hover:bg-blue-50 rounded-lg transition-colors text-blue-600">
+        <button className="p-2  rounded-lg transition-colors text-blue-600">
           <Edit2 size={16} />
         </button>
-        <button className="p-2 hover:bg-red-50 rounded-lg transition-colors text-red-600">
+        <button className="p-2  rounded-lg transition-colors text-red-600">
           <Trash2 size={16} />
         </button>
       </div>
@@ -220,7 +221,7 @@ function ProductsTable({ onAddClick }: { onAddClick: () => void }) {
           label="Inventory Value"
           value={`$${stats.value.toLocaleString()}`}
           icon={TrendingDown}
-          color="orange"
+          color="red"
         />
       </div>
 
@@ -237,21 +238,20 @@ function ProductsTable({ onAddClick }: { onAddClick: () => void }) {
           style={{ borderColor: colors.borderColor }}
         >
           <div className="relative w-full md:w-96">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={18}
-            />
-            <input
+            <VendooInput
               type="text"
               placeholder="Search by name, SKU or category..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all text-sm"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e: any) => setSearchQuery(e.target.value)}
+              PrefixIcon={Search}
+              isFullWidth
             />
           </div>
           <div className="flex items-center gap-3 w-full md:w-auto">
             <VendooButton onClick={onAddClick} className="flex-1 md:flex-none">
-              <Plus size={18} className="mr-2" /> Add Product
+              <div className="flex flex-row justify-center items-center">
+                <Plus size={18} className="mr-2" /> Add Product
+              </div>
             </VendooButton>
             <button
               className="p-2.5 border rounded-xl hover:bg-gray-50 transition-colors"

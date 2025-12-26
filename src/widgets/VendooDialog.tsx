@@ -94,7 +94,7 @@ export const VendooDialog: React.FC<VendooDialogProps> = ({
     <AnimatePresence mode="wait">
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-auto"
           aria-labelledby="dialog-title"
           role="dialog"
           aria-modal="true"
@@ -184,7 +184,7 @@ export const VendooDialog: React.FC<VendooDialogProps> = ({
 
             {/* Dialog Body */}
             <main
-              className="w-full p-6 overflow-y-auto grow"
+              className="w-full p-6 overflow-y-auto grow no-scrollbar"
               style={{
                 color: currentTheme.isDark ? TextColorDark : TextColorWhite,
               }}
