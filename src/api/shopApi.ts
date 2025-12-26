@@ -59,7 +59,7 @@ export const createShopAPI = async (userID: string, shop: VendooShop) => {
 };
 
 export const getShopByUserIdAPI = async (userID: string) => {
-  const token = useUserStore().currentUserToken;
+  const token = useUserStore.getState().currentUserToken;
   try {
     const response = await axiosInstance.post(
       GET_SHOP_BY_USER_ID,
