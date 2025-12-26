@@ -59,10 +59,19 @@ export const createShopAPI = async (userID: string, shop: VendooShop) => {
 };
 
 export const getShopByUserIdAPI = async (userID: string) => {
+  const token = useUserStore().currentUserToken;
   try {
-    const response = await axiosInstance.post(GET_SHOP_BY_USER_ID, {
-      user_id: userID,
-    });
+    const response = await axiosInstance.post(
+      GET_SHOP_BY_USER_ID,
+      {
+        user_id: userID,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (response.data.status === HttpStatusCode.Found) {
       return response.data;
     }
