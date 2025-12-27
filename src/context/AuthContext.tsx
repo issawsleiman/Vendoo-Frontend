@@ -6,10 +6,13 @@ import {
   RegisterAPI,
   SendEmailVerificationTokenAPI,
   SendNewPassword,
+  UpdateUserAPI as UpdateProfileAPI,
+  type UpdateProfileInput,
 } from "../api/authApi";
 
 import { toast } from "react-toastify";
 import { TextButton } from "../widgets/TextButton";
+import type { UserProfile } from "../store/useUserStore";
 
 const userTokenKey = "auth1Token";
 
@@ -27,12 +30,12 @@ export interface RegisterInfo {
 }
 
 export interface Profile {
-  UserID: number;
+  UserID?: number;
   Name: string;
   Email: string;
   Image?: string;
-  hasShop: boolean;
-  memberSince: string;
+  hasShop?: boolean;
+  memberSince?: string;
   location: string;
   phoneNumber: string;
 }
@@ -56,6 +59,11 @@ interface AuthManager {
 
   // Google login
   GoogleLogin: (token: string) => Promise<AuthResponse | null>;
+
+  // updateUserProfile
+  UpdateUserProfile: (
+    profile: UpdateProfileInput
+  ) => Promise<UserProfile | null>;
 }
 
 const AuthContext = createContext<AuthManager | null>(null);
@@ -237,6 +245,42 @@ export function AuthenticationProvider({
     return null;
   };
 
+  // Update user profile
+  const UpdateUserProfile = async (
+    profile: UpdateProfileInput
+  ): Promise<UserProfile | null> => {
+    try {
+      const response = await UpdateProfileAPI(profile);
+      if (response) {
+        const {
+          name,
+          email,
+          image,
+          has_shop,
+          location,
+          phone_number,
+          member_since,
+        } = response.user;
+
+        const updatedProfile: UserProfile = {
+          name: name,
+          email: email,
+          image: image,
+          hasShop: has_shop,
+          memberSince: member_since,
+          location: location,
+          phoneNumber: phone_number,
+        };
+
+        return updatedProfile;
+      }
+    } catch (err: any) {
+      toast.error(err);
+      return null;
+    }
+    return null;
+  };
+
   // Get token
   const GetUserAuthToken = () => localStorage.getItem(userTokenKey);
   return (
@@ -249,6 +293,7 @@ export function AuthenticationProvider({
         CheckEmailIfExists: CheckEmailIfExists,
         ResetUserPassword: ResetPassword,
         GoogleLogin: GoogleLogin,
+        UpdateUserProfile: UpdateUserProfile,
       }}
     >
       <>{children}</>
@@ -256,7 +301,7 @@ export function AuthenticationProvider({
   );
 }
 
-export const useAuthManager = () => {
+export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (!context)
     throw new Error(

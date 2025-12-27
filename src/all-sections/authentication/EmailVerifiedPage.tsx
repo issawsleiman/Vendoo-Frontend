@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLandingContext } from "../../context/LandingContext";
-import { useAuthManager } from "../../context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import {
   PrimaryColorWhite,
   SecondaryColorWhite,
@@ -9,7 +9,7 @@ import {
 import VendooButton from "../../widgets/VendooButton";
 
 export default function VerifyEmailPage() {
-  const authContext = useAuthManager();
+  const authContext = useAuthContext();
 
   // loading
   const [loading, setLoading] = useState(true);
@@ -61,7 +61,7 @@ function EmailVerificationScreenWrapper({
   isVerified: boolean;
 }) {
   const navigator = useNavigate();
-  const authContext = useAuthManager();
+  const authContext = useAuthContext();
   const publicContext = useLandingContext();
 
   return (

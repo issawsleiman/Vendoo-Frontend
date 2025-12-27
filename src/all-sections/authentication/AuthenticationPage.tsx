@@ -15,7 +15,7 @@ import {
 } from "../../utils/constants/colors";
 
 import { LockIcon, MailIcon, User2Icon, Sparkles } from "lucide-react";
-import { useAuthManager } from "../../context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -124,7 +124,7 @@ function AuthenticationForm({
 }: AuthenticationFormProps) {
   const navigate = useNavigate();
   const publicContext = useLandingContext();
-  const authManager = useAuthManager();
+  const authManager = useAuthContext();
   const userStore = useUserStore();
 
   const [isRegistering, setIsRegistering] = useState(

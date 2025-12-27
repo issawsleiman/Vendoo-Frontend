@@ -2,15 +2,15 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export interface UserProfile {
-  userID: string | undefined;
+  userID?: string | undefined;
   name: string | null;
-  email: string | null;
+  email?: string | null;
   image: string | null;
   role?: string | null;
-  hasShop: boolean | null;
-  location: string;
-  phoneNumber: string;
-  memberSince: string | null;
+  hasShop?: boolean | null;
+  location?: string;
+  phoneNumber?: string;
+  memberSince?: string | null;
 }
 
 interface UserState {
@@ -44,7 +44,7 @@ export const useUserStore = create<UserState>()(
         set({ currentUserToken: userToken }),
     }),
     {
-      name: "user-profile-storage1", // name of the storage (must be unique)
+      name: "user-profile-storage1",
     }
   )
 );

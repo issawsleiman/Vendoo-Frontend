@@ -34,6 +34,8 @@ import { AccentColorDark } from "../../../utils/constants/colors";
 import { ToggleSwitch } from "./storeSettings";
 import { SettingsHeaderContainer } from "../components/SettingsHeaderContainer";
 import { ProfileActionButtons } from "../components/ProfileActionButtons";
+import { useAuthContext } from "../../../context/AuthContext";
+import type { UpdateProfileInput } from "../../../api/authApi";
 
 // --- Types ---
 interface ProfileFormData {
@@ -54,7 +56,8 @@ interface InfoField {
 // --- Main Component ---
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const { profile, resetUserProfile } = useUserStore();
+  const authContext = useAuthContext();
+  const { profile, resetUserProfile, setUserProfile } = useUserStore();
   const { colors } = useThemeContext();
   const { setSelectedDashboardItem, setEditingState: setEditingProfile } =
     useDashboardContext();
@@ -70,14 +73,15 @@ export default function ProfilePage() {
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
 
   useEffect(() => {
+    console.log(useUserStore.getState().currentUserToken);
     setSelectedDashboardItem("Profile");
     if (profile) {
       setFormData({
         fullName: profile.name || "",
         email: profile.email || "",
-        location: profile.location || "Jal Deeb",
-        phoneNumber: profile.phoneNumber || "71330986",
-        memberSince: profile.memberSince || "1/1/2025",
+        location: profile.location || "",
+        phoneNumber: profile.phoneNumber || "",
+        memberSince: profile.memberSince || "",
       });
     }
   }, [profile, setSelectedDashboardItem]);
@@ -99,7 +103,20 @@ export default function ProfilePage() {
 
   const handleUpdateProfile = (e: FormEvent) => {
     e.preventDefault();
-    console.log("Submitting Data:", formData);
+
+    const updateProfile = async () => {
+      console.log("UserID:", useUserStore.getState().profile?.userID);
+      const profile: UpdateProfileInput = {
+        name: formData.fullName,
+        image: "",
+        location: formData.location!,
+        phone_number: formData.phoneNumber,
+      };
+      const updatedProfile = await authContext.UpdateUserProfile(profile);
+      setUserProfile(updatedProfile);
+    };
+
+    updateProfile();
     setEditingProfile(false);
   };
 

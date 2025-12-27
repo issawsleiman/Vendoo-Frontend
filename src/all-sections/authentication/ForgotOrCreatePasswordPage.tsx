@@ -18,7 +18,7 @@ import {
 
 import { useLandingContext } from "../../context/LandingContext";
 import { useEffect, useState, type FormEvent } from "react";
-import { useAuthManager } from "../../context/AuthContext";
+import { useAuthContext } from "../../context/AuthContext";
 import VendooButton from "../../widgets/VendooButton";
 import { VendooInput } from "../../widgets/VendooInput";
 import VendooLabel from "../../widgets/VendooLabel";
@@ -39,7 +39,7 @@ export default function ForgotOrCreatePasswordPage({
 }) {
   const isDark = useThemeContext().isDark;
   const navigate = useNavigate();
-  const authManager = useAuthManager();
+  const authManager = useAuthContext();
   const publicManager = useLandingContext();
 
   const token = new URLSearchParams(window.location.search).get("token") || "";

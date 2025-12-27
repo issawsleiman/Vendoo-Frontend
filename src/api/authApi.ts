@@ -2,6 +2,8 @@
 
 import { HttpStatusCode } from "axios";
 import axiosInstance from "./axiosInstance";
+import { toast } from "react-toastify";
+import { useUserStore } from "../store/useUserStore";
 
 // MY ENDPOINTS
 const AUTH_LOGIN = "/auth/login";
@@ -10,6 +12,8 @@ const AUTH_VERIFY_EMAIL = "/auth/verify_email";
 const AUTH_CHECK_EMAIL = "/auth/check-email";
 const AUTH_RESET_PASSWORD = "/auth/reset-password";
 const AUTH_GOOGLE_LOGIN = "/auth/google/login";
+const AUTH_UPDATE_PROFILE = "/auth/update-user";
+
 const FAILED_TO_ACCESS_SERVER = "Unable to reach Vendoo Server";
 
 // Login API
@@ -98,6 +102,41 @@ export const GoogleLoginAPI = async (token: string) => {
     return response.data;
   } catch (error: any) {
     console.log("Google login error response:", error.response);
+    throw error.response.data.error || FAILED_TO_ACCESS_SERVER;
+  }
+};
+
+// Update user profile
+export interface UpdateProfileInput {
+  name: string;
+  image?: string;
+  phone_number: string;
+  location: string;
+}
+export const UpdateUserAPI = async (profile: UpdateProfileInput) => {
+  try {
+    const response = await axiosInstance.post(
+      AUTH_UPDATE_PROFILE,
+      {
+        name: profile.name,
+        image: profile.image,
+        phone_number: profile.phone_number,
+        location: profile.location!,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${useUserStore.getState().currentUserToken}`,
+        },
+      }
+    );
+    if (response.data.status === HttpStatusCode.Ok) {
+      console.log("Response:", response.data);
+      toast.success("Profile updated successfully");
+      return response.data;
+    }
+    throw response.data.error || "Failed to update profile";
+  } catch (error: any) {
+    console.log("Error Profile Update:", error.response);
     throw error.response.data.error || FAILED_TO_ACCESS_SERVER;
   }
 };
